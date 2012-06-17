@@ -63,7 +63,7 @@ MainWindow::MainWindow() : zoom_slider(Gtk::ORIENTATION_HORIZONTAL),
   add_accel_group(ui_manager->get_accel_group());
 
   try {
-    ui_manager->add_ui_from_file("menubar.xml");
+    ui_manager->add_ui_from_file("gui/menubar.xml");
   } catch(const Glib::Error& ex) {
     std::cerr << "building menus failed: " <<  ex.what();
   }
