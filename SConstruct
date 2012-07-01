@@ -25,9 +25,9 @@ gui = [
   'gui/libraryView.cpp',
   'gui/editView.cpp'
 ]
-  database = [
-  'db/dbConnector.cpp',
-  'db/hashFunctions.cpp'
+database = [
+  'database/dbConnector.cpp',
+  'database/hashFunctions.cpp'
 ]
 plugins = [
   'plugins/pluginManager.cpp',
@@ -50,7 +50,3 @@ program = env.Program('unit_test', \
 test_alias = Alias('unit_test', [program], program[0].path)
 
 AlwaysBuild(test_alias)
-
-async = env.Program('async', \
-      source = asynchronous + demo
-      )

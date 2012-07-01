@@ -8,9 +8,9 @@
 #include <iostream> //for testing end error reporting
 #include <boost/lexical_cast.hpp>
 
-#include "../include/dbConnector.hpp"
+#include "../include/database/dbConnector.hpp"
 #include "../include/disk.hpp"
-#include "../include/hashFunctions.hpp"
+#include "../include/database/hashFunctions.hpp"
 
 using namespace boost::filesystem;
 using boost::lexical_cast;

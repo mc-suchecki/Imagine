@@ -18,7 +18,7 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <sqlite3.h>
-#include "disk.hpp"
+#include "../disk.hpp"
 
 class Disk;
 
