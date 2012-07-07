@@ -11,13 +11,16 @@ EditView::EditView(MainWindow *w) : window(w),
   effects_box(Gtk::ORIENTATION_VERTICAL), basic_label("Basic editing"),
   colors_label("Colors modification"), effects_label("Other effects"),
   library_button(Gtk::Stock::QUIT), undo_button(Gtk::Stock::UNDO),
-  redo_button(Gtk::Stock::REDO), put_effect_button("Apply effect"),
-  plugin_buttons(Gtk::ORIENTATION_VERTICAL) {
+  redo_button(Gtk::Stock::REDO), apply_cancel_buttons(Gtk::ORIENTATION_HORIZONTAL),
+  apply_button(Gtk::Stock::APPLY), cancel_button(Gtk::Stock::CANCEL),
+  pluginFrame("Plugin options"), plugin_buttons(Gtk::ORIENTATION_VERTICAL) {
 
   //obtaining CoreController instance
   core = CoreController::getInstance();
 
   //editing widgets
+  pluginFrame.set_shadow_type(Gtk::SHADOW_IN);
+  //TODO ^ Why this looks so ugly?!
   edit_buttons.set_margin_left(2);
   edit_buttons.set_margin_right(2);
   edit_buttons.set_margin_top(1);
@@ -28,6 +31,11 @@ EditView::EditView(MainWindow *w) : window(w),
   plugin_buttons.set_margin_top(1);
   plugin_buttons.set_margin_bottom(1);
   plugin_buttons.set_spacing(2);
+  apply_cancel_buttons.set_margin_left(2);
+  apply_cancel_buttons.set_margin_right(2);
+  apply_cancel_buttons.set_margin_top(1);
+  apply_cancel_buttons.set_margin_bottom(1);
+  apply_cancel_buttons.set_spacing(2);
 
   //adding tooltips to buttons
   left_button.set_tooltip_text("Load previous photo");
@@ -37,6 +45,8 @@ EditView::EditView(MainWindow *w) : window(w),
   library_button.set_tooltip_text("Go back to library view");
 
   //organising widgets
+  apply_cancel_buttons.pack_start(apply_button, true, true);
+  apply_cancel_buttons.pack_start(cancel_button, true, true);
   edit_buttons.pack_start(undo_button, true, true);
   edit_buttons.pack_start(redo_button, true, true);
   basic_box.pack_start(basic_label, true, true);
@@ -57,7 +67,8 @@ EditView::EditView(MainWindow *w) : window(w),
   undo_button.signal_clicked().connect(sigc::mem_fun(*core, &CoreController::undoLastEffect));
   redo_button.signal_clicked().connect(sigc::mem_fun(*core, &CoreController::redoLastEffect));
   library_button.signal_clicked().connect(sigc::mem_fun(window, &MainWindow::showLibraryView));
-  put_effect_button.signal_clicked().connect(sigc::mem_fun(this, &EditView::applyEffect));
+  apply_button.signal_clicked().connect(sigc::mem_fun(this, &EditView::applyEffect));
+  cancel_button.signal_clicked().connect(sigc::mem_fun(this, &EditView::showPluginsList));
   zoom_signal = window->zoom_slider.signal_value_changed().connect(
       sigc::mem_fun(this, &EditView::zoomImage));
   fit_signal = window->display.signal_size_allocate().connect_notify(
@@ -94,22 +105,6 @@ EditView::~EditView() {
   fit_signal.disconnect();
   page_signal.disconnect();
   //@TODO remove plugin buttons
-}
-
-///
-void EditView::showPluginBox(std::string name) { 
-  Gtk::Box *pluginBox = dynamic_cast<Gtk::Box *>(core->getPluginBox(name));
-  pluginBox->set_margin_left(2);
-  pluginBox->set_margin_right(2);
-  pluginBox->set_margin_top(1);
-  pluginBox->set_margin_bottom(1);
-  pluginBox->set_spacing(2);
-  effects_box.remove(plugin_buttons);
-  effects_box.remove(edit_buttons);
-  effects_box.pack_start(*pluginBox, false, false);
-  effects_box.pack_start(put_effect_button, false, false);
-  effects_box.pack_end(edit_buttons, false, false);
-  effects_box.show_all_children();
 }
 
 /// @fn void EditView::applyEffect()
@@ -225,4 +220,30 @@ void EditView::nextImage() {
 void EditView::prevImage() {
   current_photo = core->getPreviousPhoto();
   loadImage();
+}
+
+///
+void EditView::showPluginBox(std::string name) { 
+  Gtk::Box *pluginBox = dynamic_cast<Gtk::Box *>(core->getPluginBox(name));
+  pluginBox->set_margin_left(2);
+  pluginBox->set_margin_right(2);
+  pluginBox->set_margin_top(1);
+  pluginBox->set_margin_bottom(1);
+  pluginBox->set_spacing(2);
+  pluginFrame.remove();
+  pluginFrame.add(*pluginBox);
+  effects_box.remove(plugin_buttons);
+  effects_box.remove(edit_buttons);
+  effects_box.pack_start(pluginFrame, false, false);
+  effects_box.pack_start(apply_cancel_buttons, false, false);
+  effects_box.pack_end(edit_buttons, false, false);
+  effects_box.show_all_children();
+}
+
+void EditView::showPluginsList() {
+  effects_box.remove(pluginFrame);
+  effects_box.remove(apply_cancel_buttons);
+  effects_box.remove(edit_buttons);
+  effects_box.pack_start(plugin_buttons, true, true);
+  effects_box.pack_end(edit_buttons, false, false);
 }

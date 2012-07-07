@@ -115,8 +115,10 @@ class EditView : public WindowContent {
     Gtk::Button undo_button, redo_button;
 
     //plugin widgets
-    Gtk::ToolButton put_effect_button;
+    Gtk::Box apply_cancel_buttons;
+    Gtk::Button apply_button, cancel_button;
     std::map<std::string, Gtk::ToolButton*> plugin_map;
+    Gtk::Frame pluginFrame;
     Gtk::Box plugin_buttons;
 
     //storing current photo
@@ -132,6 +134,7 @@ class EditView : public WindowContent {
     void prevImage();
     void applyEffect();
     void showPluginBox(std::string name);
+    void showPluginsList();
 
     //signals storing (for disconnecting)
     sigc::connection zoom_signal, fit_signal, page_signal;
