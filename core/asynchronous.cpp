@@ -9,7 +9,6 @@
  *  loose threads in concurrentLoop
  */
 
-
 Asynchronous::Asynchronous(){
   boost::unique_lock<boost::mutex> lockMainLoop(mutMainLoop);
   boost::unique_lock<boost::mutex> lockConcLoop(mutConcLoop);

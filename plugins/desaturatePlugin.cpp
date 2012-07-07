@@ -1,5 +1,5 @@
-#include "../../include/plugins/desaturatePlugin.hpp"
-#include "../../include/plugins/desaturateEffect.hpp"
+#include "../include/plugins/desaturatePlugin.hpp"
+#include "../include/plugins/desaturateEffect.hpp"
 #include <iostream>
 
 using namespace std;

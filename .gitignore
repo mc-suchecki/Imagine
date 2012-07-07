@@ -1,0 +1,13 @@
+*.o
+config.cfg
+.scons*
+*.zarg*
+DB.sqlite
+*.log
+*.aux
+imagine
+unit_test
+async
+kuba.sh
+*.*.swp
+*.vsd

@@ -1,5 +1,5 @@
-#include "../../include/plugins/desaturateEffect.hpp"
-#include "../../include/photo.hpp"
+#include "../include/plugins/desaturateEffect.hpp"
+#include "../include/photo.hpp"
 #include <gtkmm.h>
 #include <iostream>
 

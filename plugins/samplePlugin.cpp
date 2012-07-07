@@ -1,5 +1,5 @@
-#include "../../include/plugins/samplePlugin.hpp"
-#include "../../include/plugins/sampleEffect.hpp"
+#include "../include/plugins/samplePlugin.hpp"
+#include "../include/plugins/sampleEffect.hpp"
 
 using namespace std;
 

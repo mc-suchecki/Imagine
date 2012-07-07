@@ -1,7 +1,7 @@
-#include "../../include/plugins/pluginManager.hpp"
-#include "../../include/plugins/plugin.hpp"
-#include "../../include/plugins/samplePlugin.hpp"
-#include "../../include/plugins/desaturatePlugin.hpp"
+#include "../include/plugins/pluginManager.hpp"
+#include "../include/plugins/plugin.hpp"
+#include "../include/plugins/samplePlugin.hpp"
+#include "../include/plugins/desaturatePlugin.hpp"
 
 using namespace std;
 

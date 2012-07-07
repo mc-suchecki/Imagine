@@ -1,6 +1,6 @@
 #include "../include/photo.hpp"
 #include "../include/disk.hpp"
-#include "../include/database/dbConnector.hpp"
+#include "../include/dbConnector.hpp"
 #include "../include/plugins/effect.hpp"
 #include "../include/photoCache.hpp"
 

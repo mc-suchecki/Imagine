@@ -26,8 +26,8 @@ gui = [
   'gui/editView.cpp'
 ]
 database = [
-  'database/dbConnector.cpp',
-  'database/hashFunctions.cpp'
+  'db/dbConnector.cpp',
+  'db/hashFunctions.cpp'
 ]
 plugins = [
   'plugins/pluginManager.cpp',
