@@ -211,7 +211,6 @@ void CoreController::removeFolderFromDB(const Gtk::TreeModel::iterator &folder) 
   if(!(bool)(*folder)[fs_columns.included]) return;
 
   //unselecting folder
-  (*folder)[fs_columns.stock_id] = "";
   (*folder)[fs_columns.included] = false;
 
   //storing changes in container (to handle OK/Cancel/Apply buttons)

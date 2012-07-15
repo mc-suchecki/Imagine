@@ -51,8 +51,10 @@ DBManagerDialog::DBManagerDialog(Gtk::Window *parent) :
   Gtk::CellRendererPixbuf *cell = Gtk::manage(new Gtk::CellRendererPixbuf);
   directory_tree.append_column("", *cell);
   column = directory_tree.get_column(1);
-  if(column)
+  if(column) {
     column->add_attribute(cell->property_stock_id(), dir_columns.stock_id);
+    column->add_attribute(cell->property_visible(), dir_columns.included);
+  }
 
   //editing folder options frame
   ignore_button.signal_clicked().connect(sigc::mem_fun(
