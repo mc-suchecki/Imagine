@@ -162,17 +162,13 @@ void CoreController::cancelDBChanges() {
   std::vector<Gtk::TreeModel::iterator>::iterator folder;
 
   //cancel adding folders
-  for(folder = added_folders.begin(); folder != added_folders.end(); ++folder) {
-    (**folder)[fs_columns.stock_id] = "";
+  for(folder = added_folders.begin(); folder != added_folders.end(); ++folder)
     (**folder)[fs_columns.included] = false;
-  }
   added_folders.clear();
 
   //cancel removing folders
-  for(folder = deleted_folders.begin(); folder != deleted_folders.end(); ++folder) {
-    (**folder)[fs_columns.stock_id] = Gtk::StockID(Gtk::Stock::FIND).get_string();
+  for(folder = deleted_folders.begin(); folder != deleted_folders.end(); ++folder)
     (**folder)[fs_columns.included] = true;
-  }
   deleted_folders.clear();
 }
 
@@ -181,16 +177,18 @@ void CoreController::cancelDBChanges() {
 /// @params folder Gtk::TreeModel::iterator pointing to selected folder.
 void CoreController::addFolderToDB(const Gtk::TreeModel::iterator &folder) {
   //selecting folder
-  (*folder)[fs_columns.stock_id] = Gtk::StockID(Gtk::Stock::FIND).get_string();
   (*folder)[fs_columns.included] = true;
 
   //storing changes in container (to handle OK/Cancel/Apply buttons)
   added_folders.push_back(folder);
 
-  //checking if library path has not changed
+  //checking if library path has to be changed
   path library_path = getLibraryDirectoryPath();
+  path dirPath = (std::string)(**folder)[fs_columns.path];
   if(library_path.empty())
     setLibraryPath((std::string)(**folder)[fs_columns.path]);
+    //setLibraryPath(dirPath.parent_path().parent_path().string());
+    
 
   //expanding and checking for subdirectories
   Gtk::TreeModel::Path path;
@@ -281,7 +279,8 @@ Glib::RefPtr<Gtk::TreeStore> CoreController::getDirectoryTree() {
     path temp_path = (*it);
     if(temp_path == library_path.parent_path()) {
       row = *(database_tree->append());
-      row[dir_columns.name] = "/";    //adding label
+      //row[dir_columns.name] = temp_path.filename().string();
+      row[dir_columns.name] = "/";
     }
     else{
       vector<path> temp_paths;
@@ -356,6 +355,7 @@ Glib::RefPtr<Gtk::TreeStore> CoreController::getFilesystemTree() {
     row = *(filesystem_tree->append());
     row[fs_columns.name] = (*it)->getName();              //adding label
     row[fs_columns.path] = (*it)->getPath().string();
+    row[fs_columns.stock_id] = Gtk::StockID(Gtk::Stock::FIND).get_string();
     row[fs_columns.included] = false;
     addAbsoluteSubdirectories(*it, row, 0);               //adding subdirectories
   }
@@ -510,11 +510,9 @@ vector<string> CoreController::getPluginNames() {
 /// @brief 
 Gtk::Widget* CoreController::getPluginBox(string name) {
   Plugin *plugin = pm->getPluginByName(name);
-  if(plugin) {
-    selectedPlugin = plugin;
-    return selectedPlugin->getWidget();
-  }
-  return NULL;
+  if(!plugin) return NULL;
+  selectedPlugin = plugin;
+  return selectedPlugin->getWidget();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,6 +614,7 @@ void CoreController::addAbsoluteSubdirectories(Directory *dir,
     childrow = *(filesystem_tree->append(row.children()));
     childrow[fs_columns.name] = (*it)->getName();              //adding label
     childrow[fs_columns.path] = (*it)->getPath().string();     //adding path
+    childrow[fs_columns.stock_id] = Gtk::StockID(Gtk::Stock::FIND).get_string();
     if(depth != 0)
       addAbsoluteSubdirectories(*it, childrow, depth-1);        //adding subdirectories
   }

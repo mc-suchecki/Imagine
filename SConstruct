@@ -3,7 +3,7 @@ LINKFLAGS = ' `pkg-config --libs gtkmm-3.0`  -lboost_filesystem -lboost_system -
 
 main = [ 'main.cpp' ]
 tests = [
-'test/unit.cpp',
+  'test/unit.cpp'
 ]
 core = [
   'core/directory.cpp',
@@ -21,6 +21,7 @@ asynchronous = [
 gui = [
   'gui/gui.cpp',
   'gui/dialogs.cpp',
+  'gui/prompts.cpp',
   'gui/window.cpp',
   'gui/libraryView.cpp',
   'gui/editView.cpp'

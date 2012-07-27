@@ -126,8 +126,8 @@ void EditView::refreshView() {
 void EditView::loadImage() {
   current_photo = core->getCurrentPhoto();
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = current_photo.pixbuf;
-  Gdk::Rectangle rectangle = window->display.get_allocation();
   if(!pixbuf) return;
+  Gdk::Rectangle rectangle = window->display.get_allocation();
 
   //displaying filename
   window->statusbar.set_label(current_photo.path.string());

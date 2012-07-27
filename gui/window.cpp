@@ -2,6 +2,7 @@
 #include "../include/core.hpp"
 #include "../include/dialogs.hpp"
 #include "../include/window.hpp"
+#include "../include/prompts.hpp"
 
 /// @fn MainWindow::MainWindow()
 /// @brief MainWindow constructor - connects to UserInterface, creates menubar,
@@ -156,7 +157,7 @@ void MainWindow::showAbout() {
 /// @brief Method responsible for displaying Preferences dialog.
 void MainWindow::editPreferences() {
   PreferencesDialog *preferences_editor = new PreferencesDialog(this);
-  preferences_editor ->run();
+  preferences_editor->run();
   delete preferences_editor;
 }
 
@@ -181,42 +182,19 @@ void MainWindow::editPhotoTags() {
 /// @brief Method responsible for checking for unsaved photos and
 ///        displaying the prompt or closing the application.
 bool MainWindow::on_delete_event(GdkEventAny* event) {
-  if(!core->modifiedPhotosExist())
-    return false;
 
-  //prompt is already displayed
+  //close application if there are no unsaved photos
+  if(!core->modifiedPhotosExist()) return false;
+
+  //cancel creating prompt if prompt is already displayed
   if(prompt) return true;
 
-  //displaying prompt
-  prompt = new Gtk::InfoBar;
-  Gtk::Box *box = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
-  Gtk::Container *container = dynamic_cast<Gtk::Container*>(prompt->get_content_area());
-  if(container) container->add(*box);
-  box->set_spacing(20);
-
-  //adding image
-  Gtk::Image *icon = new Gtk::Image;
-  if(Gtk::Stock::lookup(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG, *icon))
-    box->pack_start(*icon, false, false);
-
-  //adding label
-  Gtk::Label *label = new Gtk::Label("It seems like there are some unsaved photos. If you don't save them, changes will be lost.");
-  label->set_line_wrap(true);
-  box->pack_start(*label, false, false);
-
-  //adding button
-  prompt->add_button("Close without saving", 0);
-  prompt->add_button("Save photos", 1);
-  prompt->add_button("Cancel", 2);
-  prompt->signal_response().connect(sigc::mem_fun(*this,
-                       &MainWindow::managePromptResponse));
-
-  //displaying
+  //creating prompt
+  prompt = new UnsavedPhotosPrompt(this);
   right_box.remove(display);
   right_box.pack_start(*prompt, false, false);
   right_box.pack_start(display, true, true);
   show_all_children();
-
   return true;
 }
 

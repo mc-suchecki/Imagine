@@ -8,6 +8,7 @@
 
 class PreferencesDialog;
 class DBManagerDialog;
+class CoreController;
 class WindowContent;
 class Directory;
 
@@ -19,9 +20,11 @@ class Directory;
  */
 class MainWindow : public Gtk::Window {
   public:
+    friend class UnsavedPhotosPrompt;
     friend class UserInterface;
     friend class LibraryView;
     friend class EditView;
+    friend class DBPrompt;
 
     void refreshActiveView();
 
@@ -77,7 +80,6 @@ class MainWindow : public Gtk::Window {
  *  @brief Abstract class, parent of LibraryViewContent and EditViewContent,
  *         uses State pattern to define type of view (library/photo edit).
  */
-
 class WindowContent {
   public:
     virtual void refreshView() = 0;
@@ -186,7 +188,6 @@ class LibraryView : public WindowContent {
     //other methods
     void fillTagsList();
     void fillDatabaseTree();
-    void createDatabase(int);
     void promptAboutDatabase();
     void addSubdirectories(Directory *, Gtk::TreeModel::Row &);
 };

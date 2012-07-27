@@ -1,6 +1,7 @@
 #include "../include/gui.hpp"
 #include "../include/core.hpp"
 #include "../include/window.hpp"
+#include "../include/prompts.hpp"
 
 /// @fn LibraryView::LibraryView(MainWindow *w)
 /// @brief LibraryView constructor - connects to UserInterface and builds library view gui.
@@ -37,12 +38,6 @@ LibraryView::~LibraryView() {
 /// @fn LibraryView::refreshView()
 /// @brief LibraryView method for refreshing the view.
 void LibraryView::refreshView() {
-  if(db_prompt) {
-    window->right_box.remove(*db_prompt);
-    delete db_prompt;
-    db_prompt = NULL;
-  }
-
   directory_tree = core->getDirectoryTree();
   directory_view.set_model(directory_tree);
   tags_list = core->getTagsList();
@@ -137,37 +132,12 @@ void LibraryView::loadImagesByTags() {
 /// @fn void LibraryView::promptAboutDatabase()
 /// @brief Method responsible for prompting the user if db is not created.
 void LibraryView::promptAboutDatabase() {
-  //creating dialog
-  db_prompt = new Gtk::InfoBar;
-  Gtk::Box *box = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
-  Gtk::Container *container = dynamic_cast<Gtk::Container*>(db_prompt->get_content_area());
-  if(container) container->add(*box);
-  box->set_spacing(20);
-
-  //adding image
-  Gtk::Image *icon = new Gtk::Image;
-  if(Gtk::Stock::lookup(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG, *icon))
-    box->pack_start(*icon, false, false);
-
-  //adding label
-  Gtk::Label *label = new Gtk::Label("It seems like the photo database is not created. You must create photo database by setting folders in which Imagine should look for your photos.");
-  label->set_line_wrap(true);
-  box->pack_start(*label, false, false);
-
-  //adding button
-  db_prompt->add_button("Create database", 0);
-  db_prompt->signal_response().connect(sigc::mem_fun(*this,
-                       &LibraryView::createDatabase));
+  if(db_prompt) return;
+  db_prompt = new DBPrompt(window);
 
   //displaying
   window->right_box.remove(window->display);
   window->right_box.pack_start(*db_prompt, false, false);
   window->right_box.pack_start(window->display, true, true);
   window->show_all_children();
-}
-
-/// @fn void LibraryView::createDatabase(int response)
-/// @brief Method responsible for displaying the DB Manager Dialog.
-void LibraryView::createDatabase(int response) {
-  window->editDatabase();
 }
