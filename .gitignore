@@ -1,13 +1,27 @@
+# Object files
 *.o
+
+# Imagine files
+test.cfg
 config.cfg
-.scons*
-*.zarg*
 DB.sqlite
+
+# Executables
+imagine
+tests
+
+# Scons files
+.scons*
+
+# Gcov files
+./gcov/
+*.gcda
+*.gcno
+*.gcov
+
+# Other files
+*.zarg*
 *.log
 *.aux
-imagine
-unit_test
-async
-kuba.sh
-*.*.swp
+*.swp
 *.vsd
