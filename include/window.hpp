@@ -1,10 +1,8 @@
 #pragma once
 
 #include <gtkmm.h>
-#include <vector>
-#include <string>
-#include <map>
-#include "./global.hpp"
+//#include <vector>
+//#include "./global.hpp"
 
 class PreferencesDialog;
 class DBManagerDialog;
@@ -85,109 +83,4 @@ class WindowContent {
     virtual void refreshView() = 0;
     WindowContent() {};
     virtual ~WindowContent() {};
-};
-
-/** @class EditView
- *  @brief Uses State pattern to switch MainWindow to photo edit view
- *         and handles tasks associated with this view.
- */
-class EditView : public WindowContent {
-  public:
-    friend class MainWindow;
-    friend class UserInterface;
-
-    virtual void refreshView();
-
-  private:
-    EditView() {};
-    ~EditView();
-    EditView(MainWindow *);
-
-    //connection with upper classes
-    CoreController *core;
-    MainWindow *window;
-
-    //widgets
-    Gtk::Image image;
-    Gtk::Box edit_buttons;
-    Gtk::ToolButton left_button, right_button;
-    Gtk::Box basic_box, colors_box, effects_box;
-    Gtk::Label basic_label, colors_label, effects_label;
-    Gtk::ToolButton library_button;
-    Gtk::Button undo_button, redo_button;
-
-    //plugin widgets
-    Gtk::Box apply_cancel_buttons;
-    Gtk::Button apply_button, cancel_button;
-    std::map<std::string, Gtk::ToolButton*> plugin_map;
-    Gtk::Frame pluginFrame;
-    Gtk::Box plugin_buttons;
-
-    //storing current photo
-    PhotoData current_photo;
-
-    //handling signals
-    void editWithExternalEditor();
-    void onPageSwitch(Gtk::Widget *, guint);
-    void fitImage(Gtk::Allocation &);
-    void loadImage();
-    void zoomImage();
-    void nextImage();
-    void prevImage();
-    void applyEffect();
-    void showPluginBox(std::string name);
-    void showPluginsList();
-
-    //signals storing (for disconnecting)
-    sigc::connection zoom_signal, fit_signal, page_signal;
-
-    //additional function for fitting Pixbuf to widget
-    Glib::RefPtr<Gdk::Pixbuf> resizeImage(Glib::RefPtr<Gdk::Pixbuf>, Gdk::Rectangle);
-};
-
-/** @class LibraryView
- *  @brief Uses State pattern to switch MainWindow to library view
- *         and handles tasks associated with this view.
- */
-class LibraryView : public WindowContent {
-  public:
-    friend class MainWindow;
-    friend class UserInterface;
-
-    virtual void refreshView();
-
-  private:
-    LibraryView() {};
-    ~LibraryView();
-    LibraryView(MainWindow *);
-
-    //connection with upper classes
-    CoreController *core;
-    MainWindow *window;
-
-    //widgets
-    Gtk::DrawingArea images;
-
-    //database prompt
-    Gtk::InfoBar *db_prompt;
-
-    //directory tree
-    Glib::RefPtr<Gtk::TreeStore> directory_tree;
-    Gtk::TreeView directory_view;
-    DirectoryTreeColumns dir_columns;
-
-    //tags list
-    Glib::RefPtr<Gtk::ListStore> tags_list;
-    Gtk::TreeView tags_view;
-    TagsListColumns tags_columns;
-
-    //signal handlers
-    void loadImagesByDirectory(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*);
-    void loadImagesByTags();
-
-    //other methods
-    void fillTagsList();
-    void fillDatabaseTree();
-    void promptAboutDatabase();
-    void addSubdirectories(Directory *, Gtk::TreeModel::Row &);
 };

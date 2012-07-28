@@ -2,6 +2,8 @@
 #include "../include/core.hpp"
 #include "../include/dialogs.hpp"
 #include "../include/window.hpp"
+#include "../include/editView.hpp"
+#include "../include/libraryView.hpp"
 #include "../include/prompts.hpp"
 
 /// @fn MainWindow::MainWindow()

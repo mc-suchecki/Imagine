@@ -1,6 +1,7 @@
 #include "../include/gui.hpp"
 #include "../include/core.hpp"
 #include "../include/window.hpp"
+#include "../include/libraryView.hpp"
 #include "../include/prompts.hpp"
 
 /// @fn LibraryView::LibraryView(MainWindow *w)

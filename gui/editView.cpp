@@ -1,6 +1,7 @@
 #include "../include/gui.hpp"
 #include "../include/core.hpp"
 #include "../include/window.hpp"
+#include "../include/editView.hpp"
 
 /// @fn EditView::EditView(MainWindow *w)
 /// @brief EditView constructor - connects to UserInterface and builds edit view gui.
